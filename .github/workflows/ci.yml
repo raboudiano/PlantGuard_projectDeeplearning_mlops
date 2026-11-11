@@ -23,6 +23,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Configure Python path
+        run: echo "PYTHONPATH=${{ github.workspace }}" >> "$GITHUB_ENV"
+
       - name: Lint
         run: |
           python -m compileall backend ml

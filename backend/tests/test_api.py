@@ -22,11 +22,18 @@ def test_predict_endpoint_with_metadata(tmp_path, monkeypatch):
     metadata_path.write_text(json.dumps({
         "version": "test-v1",
         "architecture": "simple_cnn",
-        "class_names": service.class_names,
+        "class_names": ["test_class"],
         "dataset_root": str(tmp_path),
         "registry_stage": "candidate",
     }), encoding="utf-8")
     monkeypatch.setattr(service, "meta_path", metadata_path)
+    monkeypatch.setattr(service, "predict", lambda image_bytes: {
+        "predicted_class": "test_class",
+        "confidence": 1.0,
+        "top_predictions": [{"class_name": "test_class", "confidence": 1.0}],
+        "model_version": "test-v1",
+        "inference_time_ms": 0.0,
+    })
 
     image_array = np.zeros((32, 32, 3), dtype=np.uint8)
     image_bytes = BytesIO()
