@@ -1,13 +1,13 @@
-# Datasets and large files
-data/
-archive/
+# Datasets and large files (root-level only, so ml/data/ source code is tracked)
+/data/
+/archive/
 archive*.zip
 *.csv
 *.xlsx
 *.parquet
 
-# ML models and checkpoints
-models/
+# ML models and checkpoints (root-level only)
+/models/
 *.h5
 *.keras
 *.pt
@@ -24,6 +24,7 @@ mlartifacts/
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
 .venv/
 venv/
 
@@ -39,4 +40,3 @@ dist/
 .env
 .env.*
 !.env.example
-
