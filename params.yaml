@@ -1,0 +1,27 @@
+dataset:
+  root: "archive/plantvillage dataset/color"
+  external_eval: "archive/plantvillage dataset/segmented"
+  image_size: 224
+  valid_extensions: [".jpg", ".jpeg", ".png", ".bmp"]
+  train_fraction: 0.7
+  val_fraction: 0.15
+  test_fraction: 0.15
+
+training:
+  seed: 42
+  batch_size: 16
+  learning_rate: 0.001
+  epochs: 5
+  optimizer: "adam"
+  architecture: "simple_cnn"
+  run_name: "plantguard-baseline"
+
+monitoring:
+  drift_threshold: 0.15
+  latency_threshold_ms: 500
+  confidence_threshold: 0.7
+
+registry:
+  model_name: "PlantGuardClassifier"
+  production_stage: "production"
+  promotion_rule: "macro_f1 >= production_macro_f1 and latency_ms <= 500"

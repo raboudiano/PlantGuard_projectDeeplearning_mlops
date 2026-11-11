@@ -1,0 +1,21 @@
+archive/
+archive (8).zip
+frontend/node_modules/
+.git/
+.pytest_cache/
+__pycache__/
+*.pyc
+mlruns/
+
+monitoring/predictions.jsonl
+.git
+.github
+.venv
+
+.pytest_cache
+
+data
+models
+
+frontend/dist
+*.pt

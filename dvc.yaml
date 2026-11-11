@@ -1,0 +1,25 @@
+stages:
+  prepare_data:
+    cmd: py -m ml.data.prepare_data
+    deps:
+      - archive/plantvillage dataset/color
+      - params.yaml
+    outs:
+      - data/processed
+
+  train:
+    cmd: py -m ml.training.train
+    deps:
+      - data/processed
+      - params.yaml
+    outs:
+      - models
+
+  evaluate:
+    cmd: py -m ml.evaluation.evaluate
+    deps:
+      - models
+      - data/processed
+      - params.yaml
+    metrics:
+      - mlruns/metrics.json

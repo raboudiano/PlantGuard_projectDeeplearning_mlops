@@ -1,0 +1,58 @@
+services:
+  backend:
+    build: .
+    container_name: plantguard-backend
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir backend --reload-dir ml
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=development
+      - MODEL_PATH=/app/models/plantguard_model.pt
+      - MODEL_META_PATH=/app/models/model_metadata.json
+      - CONFIDENCE_THRESHOLD=0.6
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    volumes:
+      - ./backend:/app/backend
+      - ./ml:/app/ml
+      - ./models:/app/models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    depends_on:
+      - mlflow
+
+  frontend:
+    image: node:20-alpine
+    container_name: plantguard-frontend
+    working_dir: /app/frontend
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 3000"
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app/frontend
+      - frontend_node_modules:/app/frontend/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.17.2
+    container_name: plantguard-mlflow
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:////mlruns/mlflow.db
+      --default-artifact-root mlflow-artifacts:/
+      --serve-artifacts --artifacts-destination /mlruns
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+
+volumes:
+  frontend_node_modules:

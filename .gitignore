@@ -1,0 +1,42 @@
+# Datasets and large files
+data/
+archive/
+archive*.zip
+*.csv
+*.xlsx
+*.parquet
+
+# ML models and checkpoints
+models/
+*.h5
+*.keras
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+
+# MLflow database and artifacts
+mlflow.db
+mlruns/
+mlartifacts/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+.next/
+dist/
+
+# DVC cache
+.dvc/cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
